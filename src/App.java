@@ -3,9 +3,11 @@ public class App {
 
 	public static void main(String[] args) {
 		Bill o = new Bill();
-		o.enterCompanyInfo();
-		o.enterPersonalDetails();
-		o.printInfo();
+		o.showMenu();
+		// o.enterCompanyInfo();
+		// o.enterPersonalDetails();
+		// o.moneyMethod();
+		// o.printInfo();
 
 	}
 
