@@ -2,8 +2,8 @@
 public class App {
 
 	public static void main(String[] args) {
-		Bill o = new Bill();
-		o.showMenu();
+		CreateBill obj = new CreateBill();
+		obj.showMenu();
 		// o.enterCompanyInfo();
 		// o.enterPersonalDetails();
 		// o.moneyMethod();

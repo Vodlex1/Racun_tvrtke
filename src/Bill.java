@@ -1,38 +1,19 @@
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Scanner;
 
 public class Bill {
 	Scanner s = new Scanner(System.in);
-	String[] Tvrtka; //Naziv, Ulica, Broj, Grad_Sjedista, Postanski_Broj; 
+	String[] Tvrtka; 
 	String Ime, Prezime, OIB, currency;
 	double money = 0;
-	
-	void showMenu(){
-		System.out.println(
-			"a. Kreiranje racuna tvrtke \r\n" +
-			"b. Prikaz stanja racuna \r\n" +
-			"c. Prikaz prometa po racunu \r\n" +
-			"d. Polog novca na racun \r\n" +
-			"e. Podizanje novca s racuna \r\n" +
-			"f. Izlaz iz programa \r\n"
-		);
-		String a = s.nextLine();
-		if(a.equals("a")) enterCompanyInfo();
-		else if(a.equals("b")) printInfo();
-		else if(a.equals("c"));
-		else if(a.equals("d")) moneyMethod();
-		else if(a.equals("e"));
-		else if(a.equals("f"));
-		else {
-			for (int i = 0; i < 20; ++i) System.out.println();
-			System.out.println("Krivi unos! Pokusaj opet: ");
-			showMenu();
-		}
-		
-	}
+	ArrayList<String> traffic = new ArrayList<String>();
+	String sdf = new SimpleDateFormat("dd-MM-yyyy (hh:mm:ss)").format(Calendar.getInstance().getTime());
+	int a = 0;
 
 	void enterCompanyInfo() {
 		int a;
-		for (int i = 0; i < 50; ++i) System.out.println();
 		Tvrtka = new String[5];
 		for(int i=0; i<5; i++) {
 			if(i==0) System.out.print("Unesi naziv tvrtke: ");
@@ -42,9 +23,10 @@ public class Bill {
 			else if(i==4) System.out.print("Unesi postanski broj grada: ");
 			Tvrtka[i] = s.nextLine();
 		}	
-		System.out.println("\r\nOdaberi valutu: ");
-		System.out.println("1. HRK");
-		System.out.println("2. EUR");
+		System.out.println(
+		"\r\nOdaberi valutu: "+
+		"\r\n1. HRK"+
+		"\r\n2. EUR");
 		a = Integer.parseInt(s.nextLine());
 		if(a==1){
 			currency = " HRK";
@@ -53,9 +35,8 @@ public class Bill {
 		}
 		enterPersonalDetails();
 	}
-	
+
 	void enterPersonalDetails() {
-		for (int i = 0; i < 50; ++i) System.out.println();
 		System.out.print("\r\nUnesi ime odgovorne osobe: ");
 		Ime = s.nextLine();
 		System.out.print("Unesi prezime odgovorne osobe: ");
@@ -68,26 +49,49 @@ public class Bill {
 			if(temp.length() == 11) OIB=temp;
 			else System.out.print("Krivi OIB unos! Pokusaj opet: ");
 		}while(temp.length() != 11);
-		showMenu();
+		CreateBill.cleanScreen();
 	}
 	
-	void moneyMethod() {
-		for (int i = 0; i < 50; ++i) System.out.println();
+	void addMoney() {
 		System.out.print("Unesi izons: ");
 		if(currency == " HRK"){
-			money += Double.parseDouble(s.nextLine());
+			traffic.add(s.nextLine());
+			money += Double.parseDouble(traffic.get(a));
+			a++;
+			traffic.add(sdf);
+			a++;
 		}else if(currency == " EUR"){
-			money += Double.parseDouble(s.nextLine());
+			traffic.add(s.nextLine());
+			money += Double.parseDouble(traffic.get(a));
+			a++;
+			traffic.add(sdf);
+			a++;
 		}
-		showMenu();
+		CreateBill.cleanScreen();
 	}
-	
-	void conversion(int a, double amount){
 
+	void withdrawMoney(){
+		double temp;
+		System.out.print("Unesi izons: ");
+		if(currency == " HRK"){
+			temp = Double.parseDouble(s.nextLine()) * -1;
+			traffic.add(Double.toString(temp));
+			money += temp;
+			a++;
+			traffic.add(sdf);
+			a++;
+		}else if(currency == " EUR"){
+			temp = Double.parseDouble(s.nextLine()) * -1;
+			traffic.add(Double.toString(temp));
+			money += temp;
+			a++;
+			traffic.add(sdf);
+			a++;
+		}
+		CreateBill.cleanScreen();
 	}
 
 	void printInfo() {
-		for (int i = 0; i < 50; ++i) System.out.println();
 		if(Tvrtka != null){
 			for(int i=0; i<5; i++) {
 				System.out.println(Tvrtka[i]);
@@ -105,6 +109,23 @@ public class Bill {
 		System.out.println();
 
 		System.out.println("Vrati se:");
-		if(s.nextLine() != null) showMenu();
+		s.nextLine();
+	}
+
+	void printTraffic(){
+		System.out.println("Promet racuna: ");
+		if(traffic.size() == 0 ) System.out.println("\t-Nema ikakvog prometa-");
+		for (int i = 0; i < traffic.size(); i++) {
+			if(Double.parseDouble(traffic.get(i)) > 0) {
+				System.out.println("+" + traffic.get(i) + "    " + traffic.get(i+1));
+				i++;
+		}
+			else {
+				System.out.println(traffic.get(i) + "    " + traffic.get(i+1));
+				i++;
+			}
+		}
+		s.nextLine();
+		CreateBill.cleanScreen();
 	}
 }
